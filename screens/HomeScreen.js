@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { WebBrowser, MapView, Permissions, Location, MapMarker } from 'expo';
+import { get } from 'lodash';
 
 import { MonoText } from '../components/StyledText';
 
@@ -17,85 +18,115 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  state = {
+    location: null,
+    errorMessage: null,
+  };
+
+  markers = [
+    {
+      latlng: { latitude: 37.784124, longitude: -122.4425117 },
+      title: 'Test name 1',
+      description: 'test desc 1',
+    },
+    {
+      latlng: { latitude: 37.800572, longitude: -122.4247977 },
+      title: 'Test name 2',
+      description: 'test desc 1',
+    },
+  ];
+
+  componentWillMount() {
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+      this.setState({
+        errorMessage:
+          'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+      });
+    } else {
+      this._getLocationAsync();
+    }
+  }
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ location });
+  };
+
   render() {
+    let text = 'Waiting..';
+    if (this.state.errorMessage) {
+      text = this.state.errorMessage;
+    } else if (this.state.location) {
+      text = JSON.stringify(this.state.location.coords);
+    }
+
+    if (!this.state.location) {
+      return <Text>{text}</Text>;
+    }
+
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
+        <MapView
+          style={{ flex: 1 }}
+          initialRegion={{
+            latitude: get(this, 'state.location.coords.latitude'),
+            longitude: get(this, 'state.location.coords.longitude'),
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}>
+          {this.markers.map((marker, i) => (
+            <MapView.Marker
+              key={i}
+              coordinate={marker.latlng}
+              title={marker.title}
+              description={marker.description}
+              // image={require('../assets/images/pin.png')}
             />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
+          ))}
+        </MapView>
       </View>
     );
   }
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
+  // _maybeRenderDevelopmentModeWarning() {
+  //   if (__DEV__) {
+  //     const learnMoreButton = (
+  //       <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
+  //         Learn more
+  //       </Text>
+  //     );
 
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
+  //     return (
+  //       <Text style={styles.developmentModeText}>
+  //         Development mode is enabled, your app will be slower but you can use useful development
+  //         tools. {learnMoreButton}
+  //       </Text>
+  //     );
+  //   } else {
+  //     return (
+  //       <Text style={styles.developmentModeText}>
+  //         You are not in development mode, your app will run at full speed.
+  //       </Text>
+  //     );
+  //   }
+  // }
 
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
+  // _handleLearnMorePress = () => {
+  //   WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
+  // };
 
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
+  // _handleHelpPress = () => {
+  //   WebBrowser.openBrowserAsync(
+  //     'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
+  //   );
+  // };
 }
 
 const styles = StyleSheet.create({
