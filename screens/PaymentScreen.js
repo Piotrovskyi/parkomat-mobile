@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 // import { ExpoConfigView } from '@expo/samples';
 import { deposit } from '../api';
+import CustomButton from '../components/CustomButton';
 
 export default class PaymentScreen extends React.Component {
   static navigationOptions = {
@@ -17,43 +18,40 @@ export default class PaymentScreen extends React.Component {
   };
 
   state = {
+    amountText: 'UAH ',
     amount: '0',
   };
 
   onPay = async () => {
-    // if (!this.state.amount) return;
     const { link } = await deposit({ amount: this.state.amount });
     this.props.navigation.navigate('Confirm', { payUrl: link });
+  };
+
+  changeAmount = value => {
+    if (value.length < 4) return;
+
+    this.setState({
+      amountText: value,
+      amount: value.replace('UAH ', ''),
+    });
   };
 
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <TextInput
-          value={this.state.amount}
-          onChangeText={amount => this.setState({ amount })}
+          value={this.state.amountText}
+          onChangeText={this.changeAmount}
           placeholder={'Amount in UAH'}
           style={styles.input}
+          autoFocus
         />
 
-        <View style={styles.loginButtonWrapper}>
-          <Button title={'Pay'} onPress={this.onPay.bind(this)} />
-        </View>
+        <CustomButton style={{ marginTop: 40 }} onPress={this.onPay.bind(this)}>
+          Pay
+        </CustomButton>
       </KeyboardAvoidingView>
     );
-    // return (
-    //   <WebView
-    //     source={{
-    //       html: `<form method="POST" id="pa-form" action="https://www.liqpay.com/api/checkout" accept-charset="utf-8">
-    //   <input type="hidden" name="data" value="'${123}'" />
-    //   <input type="hidden" name="signature" value="'${123}'" />
-    //   <input type="image" src="//static.liqpay.com/buttons/p1'EN'.radius.png" name="btn_text" />
-    //   <script>document.addEventListener("DOMContentLoaded",function(){var b=document.getElementById("pa-form");b&&b.submit()})</script>
-    // </form>`,
-    //     }}
-    //     style={{ flex: 1 }}
-    //   />
-    // );
   }
 }
 
@@ -65,12 +63,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecf0f1',
   },
   input: {
-    width: '80%',
-    height: 44,
-    padding: 10,
+    width: '50%',
     borderBottomWidth: 1,
     borderColor: '#3a51c0',
     marginBottom: 10,
+    textAlign: 'center',
+    fontSize: 40,
+    height: 60,
   },
   loginButtonWrapper: {
     marginBottom: 80,
