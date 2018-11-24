@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, ScrollView } from 'react-native';
+import { View, Text, Button, ScrollView, TouchableOpacity } from 'react-native';
 // import { ExpoConfigView } from '@expo/samples';
 
 export default class WalletScreen extends React.Component {
@@ -14,6 +14,11 @@ export default class WalletScreen extends React.Component {
           <Text style={[styles.textColor, styles.headerText]}>Your ballance:</Text>
           <Text style={[styles.textColor, styles.amountText]}>$302.55</Text>
           <Text style={[styles.textColor, styles.infoText]}>Last refilling: 09 Avg at 10:46</Text>
+          <View style={styles.addButtonWrapper}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Payment')}>
+              <Text style={styles.addButtonText}>Add money</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.listHead}>
           <Text style={styles.listHeadText}>Payments History</Text>
@@ -115,5 +120,18 @@ const styles = {
   number: {
     fontSize: 15,
     color: '#808996',
+  },
+  addButtonWrapper: {
+    backgroundColor: 'white',
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+  },
+  addButtonText: {
+    fontSize: 16,
+    color: '#3a51c0',
   },
 };

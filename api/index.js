@@ -98,3 +98,20 @@ export const signup = payload => {
       console.error('API', error.message);
     });
 };
+
+export const deposit = payload => {
+  console.log('deposit', payload);
+  return fetch(apiHost + '/api/user/deposits', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...headers(),
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.error('API', error.message);
+    });
+};
