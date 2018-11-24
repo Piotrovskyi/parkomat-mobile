@@ -43,7 +43,7 @@ export default class HomeScreen extends React.Component {
   }
 
   _handleNotification = notification => {
-    console.log(notification);
+    console.log(notification.data);
     this.setState({ notification: notification });
   };
 
@@ -99,8 +99,10 @@ export default class HomeScreen extends React.Component {
 
     if (!this.state.location) {
       return (
-        <View style={{ flex: 1, padding: 20 }}>
-          <ActivityIndicator />
+        <View style={{ flex: 1, padding: 20, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator style={{ marginBottom: 10 }} />
+          <Text>We love you!</Text>
+          <Text>Your friends from parkomat</Text>
         </View>
       );
     }
@@ -118,6 +120,13 @@ export default class HomeScreen extends React.Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}>
+          <MapView.Marker
+            coordinate={{
+              latitude: get(this, 'state.location.coords.latitude'),
+              longitude: get(this, 'state.location.coords.longitude'),
+            }}
+            image={require('../assets/images/me.png')}
+          />
           {this.state.parkings.map((marker, i) => (
             <MapView.Marker
               key={i}

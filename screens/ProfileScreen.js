@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Button, Alert, AsyncStorage } from 'react-native';
+import { setToken } from '../api';
 // import { ExpoConfigView } from '@expo/samples';
 
 export default class ProfileScreen extends React.Component {
@@ -13,6 +14,7 @@ export default class ProfileScreen extends React.Component {
               text: 'Yes',
               onPress: async () => {
                 await AsyncStorage.setItem('userToken', '');
+                setToken(null);
                 navigation.navigate('Auth');
               },
             },

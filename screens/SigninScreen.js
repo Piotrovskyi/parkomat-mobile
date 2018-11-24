@@ -7,8 +7,11 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
+  Text,
+  AsyncStorage,
 } from 'react-native';
 
+import { login, setToken } from '../api';
 export default class SignInScreen extends React.Component {
   static navigationOptions = {
     title: 'Please sign in',
@@ -18,30 +21,33 @@ export default class SignInScreen extends React.Component {
     super(props);
 
     this.state = {
-      username: '',
-      password: '',
+      login: 'login',
+      password: 'password',
     };
   }
 
-  onLogin() {
-    const { username, password } = this.state;
+  async onLogin() {
+    const result = await login(this.state);
+    if (result.error) {
+      Alert.alert('Error', result.error);
+      return;
+    }
 
-    // Alert.alert('Credentials', `${username} + ${password}`);
+    await AsyncStorage.setItem('userToken', result.authorizationToken);
+    setToken(result.authorizationToken);
     this.props.navigation.navigate('Main');
   }
 
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <Image
-          style={{ width: '80%', marginBottom: 100 }}
-          source={require('../assets/images/logo.png')}
-        />
+        <Image style={{ width: '80%' }} source={require('../assets/images/logo.png')} />
+        <Text style={{ marginBottom: 100, fontSize: 17, color: '#9b9b9b' }}>Smart parking</Text>
 
         <TextInput
-          value={this.state.username}
-          onChangeText={username => this.setState({ username })}
-          placeholder={'Username'}
+          value={this.state.login}
+          onChangeText={login => this.setState({ login })}
+          placeholder={'login'}
           style={styles.input}
         />
         <TextInput
@@ -52,15 +58,15 @@ export default class SignInScreen extends React.Component {
           style={styles.input}
         />
 
-        <Button title={'Login'} style={styles.loginButton} onPress={this.onLogin.bind(this)} />
+        <View style={styles.loginButtonWrapper}>
+          <Button title={'Login'} onPress={this.onLogin.bind(this)} />
+        </View>
+
+        <Text>Don’t have an account?</Text>
+        <Button title={'Sign up'} onPress={() => this.props.navigation.navigate('Signup')} />
       </KeyboardAvoidingView>
     );
   }
-
-  // _signInAsync = async () => {
-  //   await AsyncStorage.setItem('userToken', 'abc');
-  //   this.props.navigation.navigate('App');
-  // };
 }
 
 const styles = StyleSheet.create({
@@ -78,7 +84,17 @@ const styles = StyleSheet.create({
     borderColor: '#3a51c0',
     marginBottom: 10,
   },
-  loginButton: {
-    marginTop: 100,
+  loginButtonWrapper: {
+    marginBottom: 80,
+    marginTop: 30,
+    borderWidth: 1,
+    borderColor: '#3a51c0',
+    paddingVertical: 5,
+    paddingHorizontal: 40,
+    // width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+    borderRadius: 20,
   },
 });

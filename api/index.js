@@ -1,8 +1,15 @@
 import { Permissions, Notifications } from 'expo';
 const apiHost = 'http://10.1.1.213:3000';
+let token = null;
+
+export const setToken = newToken => {
+  token = newToken;
+};
+
+const headers = () => ({ Authorization: token });
 
 export const getParkings = () => {
-  return fetch(apiHost + '/api/parkings')
+  return fetch(apiHost + '/api/parkings', { headers: headers() })
     .then(response => response.json())
     .then(items =>
       items.map(({ latitude, longitude, ...rest }) => ({
@@ -21,7 +28,7 @@ export const getParkings = () => {
 //   description: 'test desc 1',
 // },
 
-const PUSH_ENDPOINT = apiHost + '/api/users/2/notificationsToken';
+const PUSH_ENDPOINT = apiHost + '/api/user/notificationsToken';
 
 export const registerForPushNotificationsAsync = async () => {
   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -45,17 +52,32 @@ export const registerForPushNotificationsAsync = async () => {
 
   // Get the token that uniquely identifies this device
   let token = await Notifications.getExpoPushTokenAsync();
-
   // POST the token to your backend server from where you can retrieve it to send push notifications.
   return fetch(PUSH_ENDPOINT, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      ...headers(),
     },
     body: JSON.stringify({
       token,
-      userId: 2,
     }),
   }).catch(err => console.error(err.message));
+};
+
+export const login = payload => {
+  console.log('login', payload);
+  return fetch(apiHost + '/api/user/login', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.error('API', error.message);
+    });
 };
