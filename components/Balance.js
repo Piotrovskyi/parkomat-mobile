@@ -12,10 +12,9 @@ import {
 
 export default class Balance extends React.Component {
   render() {
-    console.log(Dimensions.get('screen').width - 20);
     return (
       <View style={styles.tabBarInfoContainer}>
-        <Text>Your balance: 100 HRN</Text>
+        <Text>Your balance: {this.props.amount} UAH</Text>
       </View>
     );
   }

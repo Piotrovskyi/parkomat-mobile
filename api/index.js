@@ -7,7 +7,11 @@ export const setToken = newToken => {
   console.log(token);
 };
 
-const headers = () => ({ Authorization: token });
+const headers = () => ({
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+  Authorization: token,
+});
 
 export const getParkings = () => {
   return fetch(apiHost + '/api/parkings', { headers: headers() })
@@ -109,6 +113,49 @@ export const deposit = payload => {
       ...headers(),
     },
     body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.error('API', error.message);
+    });
+};
+
+export const me = () => {
+  return fetch(apiHost + '/api/user', {
+    method: 'GET',
+    headers: {
+      ...headers(),
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      return data;
+    })
+    .catch(error => {
+      console.error('API', error.message);
+    });
+};
+
+export const depositsList = () => {
+  return fetch(apiHost + '/api/user/deposits', {
+    method: 'GET',
+    headers: {
+      ...headers(),
+    },
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.error('API', error.message);
+    });
+};
+
+export const paymentsList = () => {
+  return fetch(apiHost + '/api/user/payments', {
+    method: 'GET',
+    headers: {
+      ...headers(),
+    },
   })
     .then(response => response.json())
     .catch(error => {

@@ -13,12 +13,13 @@ import {
 } from 'react-native';
 import { WebBrowser, MapView, Permissions, Location, MapMarker, Notifications } from 'expo';
 import { get } from 'lodash';
-import { getParkings, registerForPushNotificationsAsync } from '../api';
+import { getParkings, registerForPushNotificationsAsync, me } from '../api';
 
 import ParkingInfo from '../components/ParkingInfo';
 import Balance from '../components/Balance';
 import { MonoText } from '../components/StyledText';
 // import FadeInView from '../components/AnimatedComponent';
+import { subscribe, setState } from '../store';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -31,9 +32,14 @@ export default class HomeScreen extends React.Component {
     parkings: [],
     selectedParking: null,
     notification: {},
+    balance: 0,
   };
 
   componentDidMount() {
+    subscribe(({ balance }) => {
+      this.setState({ balance });
+    });
+
     registerForPushNotificationsAsync();
 
     // Handle notifications that are received or selected while the app
@@ -45,11 +51,20 @@ export default class HomeScreen extends React.Component {
   }
 
   _handleNotification = notification => {
-    console.log(notification.data);
-    this.setState({ notification: notification });
+    if (!notification.data) return;
+    switch (notification.data.type) {
+      case 'add-deposit': {
+        setState({ balance: notification.data.amount });
+        return;
+      }
+    }
+    // this.setState({ notification: notification });
   };
 
-  componentWillMount() {
+  async componentWillMount() {
+    const user = await me();
+    setState(user);
+
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
         errorMessage:
@@ -146,7 +161,7 @@ export default class HomeScreen extends React.Component {
           <ParkingInfo selectedParking={selectedParking} makeRoute={this.makeRoute} />
         )}
 
-        <Balance />
+        <Balance amount={this.state.balance} />
       </View>
     );
   }
