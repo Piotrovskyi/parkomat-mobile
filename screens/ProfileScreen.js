@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Button } from 'react-native';
 // import { ExpoConfigView } from '@expo/samples';
 
-export default class SettingsScreen extends React.Component {
+export default class ProfileScreen extends React.Component {
   static navigationOptions = {
     title: 'Profile',
   };

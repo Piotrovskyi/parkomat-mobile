@@ -21,10 +21,11 @@ export const getParkings = () => {
 //   description: 'test desc 1',
 // },
 
-const PUSH_ENDPOINT = apiHost + '/api/users/push-token';
+const PUSH_ENDPOINT = apiHost + '/api/settings/notificationsToken';
 
 export const registerForPushNotificationsAsync = async () => {
   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  console.log(existingStatus);
   let finalStatus = existingStatus;
 
   // only ask if permissions have not already been determined, because
@@ -38,6 +39,7 @@ export const registerForPushNotificationsAsync = async () => {
 
   // Stop here if the user did not grant permissions
   if (finalStatus !== 'granted') {
+    console.log('NO PERMISSIONS');
     return;
   }
 
@@ -52,12 +54,8 @@ export const registerForPushNotificationsAsync = async () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      token: {
-        value: token,
-      },
-      user: {
-        username: 'Brent',
-      },
+      token,
+      userId: 2,
     }),
-  });
+  }).catch(err => console.err(err));
 };

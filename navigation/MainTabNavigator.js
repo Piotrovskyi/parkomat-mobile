@@ -4,40 +4,43 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import PaymentScreen from '../screens/PaymentScreen';
+import WalletScreen from '../screens/WalletScreen';
 
+// =======
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Map',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
+  tabBarLabel: 'Find parking',
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'ios-search'} />,
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+// =======
+const WalletStack = createStackNavigator({
+  Wallet: WalletScreen,
   Payment: PaymentScreen,
 });
 
-SettingsStack.navigationOptions = {
+WalletStack.navigationOptions = {
+  tabBarLabel: 'Wallet',
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'ios-wallet'} />,
+};
+
+// =======
+const ProfileStack = createStackNavigator({
+  Profile: ProfileScreen,
+});
+
+ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'ios-contact'} />,
 };
 
 export default createBottomTabNavigator({
   HomeStack,
-  SettingsStack,
+  WalletStack,
+  ProfileStack,
 });
