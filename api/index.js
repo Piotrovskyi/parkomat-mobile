@@ -21,7 +21,7 @@ export const getParkings = () => {
 //   description: 'test desc 1',
 // },
 
-const PUSH_ENDPOINT = apiHost + '/api/settings/notificationsToken';
+const PUSH_ENDPOINT = apiHost + '/api/users/2/notificationsToken';
 
 export const registerForPushNotificationsAsync = async () => {
   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -57,5 +57,5 @@ export const registerForPushNotificationsAsync = async () => {
       token,
       userId: 2,
     }),
-  }).catch(err => console.err(err));
+  }).catch(err => console.error(err.message));
 };

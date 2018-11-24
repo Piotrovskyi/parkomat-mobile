@@ -39,6 +39,7 @@ ProfileStack.navigationOptions = {
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'ios-contact'} />,
 };
 
+// =========
 export default createBottomTabNavigator({
   HomeStack,
   WalletStack,

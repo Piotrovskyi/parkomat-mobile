@@ -1,11 +1,28 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, Alert, AsyncStorage } from 'react-native';
 // import { ExpoConfigView } from '@expo/samples';
 
 export default class ProfileScreen extends React.Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Profile',
-  };
+    headerRight: (
+      <Button
+        onPress={() =>
+          Alert.alert('Logout', 'Are you sure?', [
+            {
+              text: 'Yes',
+              onPress: async () => {
+                await AsyncStorage.setItem('userToken', '');
+                navigation.navigate('Auth');
+              },
+            },
+            { text: 'Cancel', style: 'cancel' },
+          ])
+        }
+        title="Logout"
+      />
+    ),
+  });
 
   handleAddMoney() {
     this.props.navigation.navigate('Payment');
