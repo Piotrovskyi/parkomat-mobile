@@ -7,11 +7,16 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
+  Button,
+  Linking,
 } from 'react-native';
 import { WebBrowser, MapView, Permissions, Location, MapMarker } from 'expo';
 import { get } from 'lodash';
+import { getParkings } from '../api';
 
 import { MonoText } from '../components/StyledText';
+// import FadeInView from '../components/AnimatedComponent';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -21,20 +26,22 @@ export default class HomeScreen extends React.Component {
   state = {
     location: null,
     errorMessage: null,
+    parkings: [],
+    selectedParking: null,
   };
 
-  markers = [
-    {
-      latlng: { latitude: 37.784124, longitude: -122.4425117 },
-      title: 'Test name 1',
-      description: 'test desc 1',
-    },
-    {
-      latlng: { latitude: 37.800572, longitude: -122.4247977 },
-      title: 'Test name 2',
-      description: 'test desc 1',
-    },
-  ];
+  // markers = [
+  //   {
+  //     latlng: { latitude: 37.784124, longitude: -122.4425117 },
+  //     title: 'Test name 1',
+  //     description: 'test desc 1',
+  //   },
+  //   {
+  //     latlng: { latitude: 37.800572, longitude: -122.4247977 },
+  //     title: 'Test name 2',
+  //     description: 'test desc 1',
+  //   },
+  // ];
 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
@@ -44,8 +51,14 @@ export default class HomeScreen extends React.Component {
       });
     } else {
       this._getLocationAsync();
+      this._getParkingsAsync();
     }
   }
+
+  _getParkingsAsync = async () => {
+    const parkings = await getParkings();
+    this.setState({ parkings });
+  };
 
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -59,6 +72,19 @@ export default class HomeScreen extends React.Component {
     this.setState({ location });
   };
 
+  selectParking(selectedParking) {
+    this.setState({ selectedParking });
+  }
+
+  makeRoute(selectedParking) {
+    Linking.openURL(
+      `http://maps.apple.com/maps?daddr=
+        ${selectedParking.latlng.latitude},${selectedParking.latlng.longitude}&saddr=${
+        this.state.location.coords.latitude
+      },${this.state.location.coords.longitude}`,
+    );
+  }
+
   render() {
     let text = 'Waiting..';
     if (this.state.errorMessage) {
@@ -68,12 +94,19 @@ export default class HomeScreen extends React.Component {
     }
 
     if (!this.state.location) {
-      return <Text>{text}</Text>;
+      return (
+        <View style={{ flex: 1, padding: 20 }}>
+          <ActivityIndicator />
+        </View>
+      );
     }
+
+    const { selectedParking } = this.state;
 
     return (
       <View style={styles.container}>
         <MapView
+          // provider={MapView.PROVIDER_GOOGLE}
           style={{ flex: 1 }}
           initialRegion={{
             latitude: get(this, 'state.location.coords.latitude'),
@@ -81,16 +114,34 @@ export default class HomeScreen extends React.Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}>
-          {this.markers.map((marker, i) => (
+          {this.state.parkings.map((marker, i) => (
             <MapView.Marker
               key={i}
               coordinate={marker.latlng}
-              title={marker.title}
-              description={marker.description}
-              // image={require('../assets/images/pin.png')}
+              onPress={() => this.selectParking(marker)}
+              onDeselect={() => this.setState({ selectedParking: null })}
+              // title={marker.title}
+              // description={marker.description}
+              image={require('../assets/images/pin.png')}
             />
           ))}
         </MapView>
+
+        {selectedParking && (
+          <View style={styles.tabBarInfoContainer}>
+            <Text style={styles.tabBarInfoText}>{selectedParking.title}</Text>
+            <Text style={styles.tabBarInfoText}>{selectedParking.description}</Text>
+
+            {/* <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
+              <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
+            </View> */}
+            <Button
+              onPress={() => this.makeRoute(selectedParking)}
+              title="make route"
+              color="blue"
+            />
+          </View>
+        )}
       </View>
     );
   }
