@@ -59,7 +59,7 @@ export default class SignInScreen extends React.Component {
         />
 
         <View style={styles.loginButtonWrapper}>
-          <Button title={'Login'} onPress={this.onLogin.bind(this)} />
+          <Button title={'Sign in'} onPress={this.onLogin.bind(this)} />
         </View>
 
         <Text>Don’t have an account?</Text>

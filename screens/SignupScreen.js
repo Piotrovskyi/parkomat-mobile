@@ -11,7 +11,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 
-import { login } from '../api';
+import { signup, login as apiLogin, setToken } from '../api';
 export default class SignupScreen extends React.Component {
   static navigationOptions = {
     title: 'Please sign in',
@@ -21,18 +21,30 @@ export default class SignupScreen extends React.Component {
     super(props);
 
     this.state = {
-      login: 'login',
+      login: 'login1',
       password: 'password',
       carNumber: 'АР2121НА',
     };
   }
 
   async onSignup() {
-    // const result = await login(this.state);
-    // if (result.error) {
-    //   Alert.alert('Error', result.error);
-    //   return;
-    // }
+    const result = await signup(this.state);
+    if (result.error) {
+      Alert.alert('Error', result.error);
+      return;
+    }
+    const { login, password } = this.state;
+
+    const result2 = await apiLogin({ login, password });
+    if (result2.error) {
+      Alert.alert('Error', result2.error);
+      return;
+    }
+
+    await AsyncStorage.setItem('userToken', result2.authorizationToken);
+    setToken(result.authorizationToken);
+    this.props.navigation.navigate('Main');
+
     // await AsyncStorage.setItem('userToken', result.authorizationToken);
     // this.props.navigation.navigate('Main');
   }
@@ -92,5 +104,14 @@ const styles = StyleSheet.create({
   loginButtonWrapper: {
     marginBottom: 80,
     marginTop: 30,
+    borderWidth: 1,
+    borderColor: '#3a51c0',
+    paddingVertical: 5,
+    paddingHorizontal: 40,
+    // width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+    borderRadius: 20,
   },
 });

@@ -81,3 +81,19 @@ export const login = payload => {
       console.error('API', error.message);
     });
 };
+
+export const signup = payload => {
+  console.log('signup', payload);
+  return fetch(apiHost + '/api/user/registration', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.error('API', error.message);
+    });
+};
