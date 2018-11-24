@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "parkomat-mobile",
-    "description": "A very interesting project.",
-    "slug": "parkomat-mobile",
+    "name": "Parkomat",
+    "description": "Smart parking, [Global Hack Weekend]",
+    "slug": "parkomat",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],
