@@ -15,6 +15,7 @@ import { WebBrowser, MapView, Permissions, Location, MapMarker, Notifications } 
 import { get } from 'lodash';
 import { getParkings, registerForPushNotificationsAsync } from '../api';
 
+import ParkingInfo from '../components/ParkingInfo';
 import { MonoText } from '../components/StyledText';
 // import FadeInView from '../components/AnimatedComponent';
 
@@ -80,14 +81,14 @@ export default class HomeScreen extends React.Component {
     this.setState({ selectedParking });
   }
 
-  makeRoute(selectedParking) {
+  makeRoute = selectedParking => {
     Linking.openURL(
       `http://maps.apple.com/maps?daddr=
         ${selectedParking.latlng.latitude},${selectedParking.latlng.longitude}&saddr=${
         this.state.location.coords.latitude
       },${this.state.location.coords.longitude}`,
     );
-  }
+  };
 
   render() {
     let text = 'Waiting..';
@@ -140,20 +141,16 @@ export default class HomeScreen extends React.Component {
           ))}
         </MapView>
 
-        {selectedParking && (
+        {/* {selectedParking && (
           <View style={styles.tabBarInfoContainer}>
             <Text style={styles.tabBarInfoText}>{selectedParking.title}</Text>
             <Text style={styles.tabBarInfoText}>{selectedParking.description}</Text>
 
-            {/* <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-              <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-            </View> */}
-            <Button
-              onPress={() => this.makeRoute(selectedParking)}
-              title="make route"
-              color="blue"
-            />
+            <Button onPress={() => this.makeRoute(selectedParking)} title="GO" color="#3a51c0" />
           </View>
+        )} */}
+        {selectedParking && (
+          <ParkingInfo selectedParking={selectedParking} makeRoute={this.makeRoute} />
         )}
       </View>
     );
