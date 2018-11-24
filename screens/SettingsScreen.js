@@ -7,7 +7,9 @@ export default class SettingsScreen extends React.Component {
     title: 'Profile',
   };
 
-  handleAddMoney() {}
+  handleAddMoney() {
+    this.props.navigation.navigate('Payment');
+  }
 
   render() {
     /* Go ahead and delete ExpoConfigView and replace it with your

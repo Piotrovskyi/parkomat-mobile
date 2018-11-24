@@ -11,9 +11,9 @@ import {
   Button,
   Linking,
 } from 'react-native';
-import { WebBrowser, MapView, Permissions, Location, MapMarker } from 'expo';
+import { WebBrowser, MapView, Permissions, Location, MapMarker, Notifications } from 'expo';
 import { get } from 'lodash';
-import { getParkings } from '../api';
+import { getParkings, registerForPushNotificationsAsync } from '../api';
 
 import { MonoText } from '../components/StyledText';
 // import FadeInView from '../components/AnimatedComponent';
@@ -28,20 +28,23 @@ export default class HomeScreen extends React.Component {
     errorMessage: null,
     parkings: [],
     selectedParking: null,
+    notification: {},
   };
 
-  // markers = [
-  //   {
-  //     latlng: { latitude: 37.784124, longitude: -122.4425117 },
-  //     title: 'Test name 1',
-  //     description: 'test desc 1',
-  //   },
-  //   {
-  //     latlng: { latitude: 37.800572, longitude: -122.4247977 },
-  //     title: 'Test name 2',
-  //     description: 'test desc 1',
-  //   },
-  // ];
+  componentDidMount() {
+    registerForPushNotificationsAsync();
+
+    // Handle notifications that are received or selected while the app
+    // is open. If the app was closed and then opened by tapping the
+    // notification (rather than just tapping the app icon to open it),
+    // this function will fire on the next tick after the app starts
+    // with the notification data.
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+  }
+
+  _handleNotification = notification => {
+    this.setState({ notification: notification });
+  };
 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
