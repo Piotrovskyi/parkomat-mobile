@@ -16,6 +16,7 @@ import { get } from 'lodash';
 import { getParkings, registerForPushNotificationsAsync } from '../api';
 
 import ParkingInfo from '../components/ParkingInfo';
+import Balance from '../components/Balance';
 import { MonoText } from '../components/StyledText';
 // import FadeInView from '../components/AnimatedComponent';
 
@@ -141,17 +142,11 @@ export default class HomeScreen extends React.Component {
           ))}
         </MapView>
 
-        {/* {selectedParking && (
-          <View style={styles.tabBarInfoContainer}>
-            <Text style={styles.tabBarInfoText}>{selectedParking.title}</Text>
-            <Text style={styles.tabBarInfoText}>{selectedParking.description}</Text>
-
-            <Button onPress={() => this.makeRoute(selectedParking)} title="GO" color="#3a51c0" />
-          </View>
-        )} */}
         {selectedParking && (
           <ParkingInfo selectedParking={selectedParking} makeRoute={this.makeRoute} />
         )}
+
+        <Balance />
       </View>
     );
   }
