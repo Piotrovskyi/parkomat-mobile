@@ -81,7 +81,7 @@ const styles = {
     borderBottomColor: '#808996',
   },
   listHeadText: {
-    fontSize: 22,
+    fontSize: 18,
     color: '#808996',
   },
 
@@ -101,7 +101,7 @@ const styles = {
     color: '#808996',
   },
   title: {
-    fontSize: 22,
+    fontSize: 18,
     color: '#2e3348',
   },
   amount: {

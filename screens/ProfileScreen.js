@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     borderColor: '#ededed',
   },
   sectionHeaderText: {
-    fontSize: 14,
+    fontSize: 18,
   },
   sectionContentContainer: {
     paddingTop: 8,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   sectionContentText: {
     color: '#808080',
-    fontSize: 14,
+    fontSize: 16,
   },
   nameText: {
     fontWeight: '600',

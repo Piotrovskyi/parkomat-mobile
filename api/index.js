@@ -1,5 +1,5 @@
 import { Permissions, Notifications } from 'expo';
-const apiHost = 'http://10.1.1.213:3000';
+const apiHost = 'http://185.12.178.11:3000';
 let token = null;
 
 export const setToken = newToken => {

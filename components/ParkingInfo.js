@@ -29,7 +29,7 @@ export default class ParkingInfo extends React.Component {
           </View>
 
           <View style={[styles.center, { padding: 5 }]}>
-            <View style={{ borderColor: 'gray', borderWidth: 1, flex: 1 }} />
+            <View style={{ borderColor: 'gray', borderLeftWidth: 1, flex: 1 }} />
           </View>
 
           <View style={[styles.center, { paddingHorizontal: 10 }]}>
