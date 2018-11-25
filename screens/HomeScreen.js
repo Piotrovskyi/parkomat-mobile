@@ -157,7 +157,11 @@ export default class HomeScreen extends React.Component {
               onDeselect={() => this.setState({ selectedParking: null })}
               // title={marker.title}
               // description={marker.description}
-              image={require('../assets/images/pin.png')}
+              image={
+                marker.id === get(this, 'state.selectedParking.id')
+                  ? require('../assets/images/pin_3.png')
+                  : require('../assets/images/pin.png')
+              }
             />
           ))}
         </MapView>
