@@ -3,7 +3,7 @@ const apiHost = 'http://185.12.178.11:3000';
 let token = null;
 
 export const setToken = newToken => {
-  console.log('setToken', token);
+  console.log('setToken', newToken);
   token = newToken;
 };
 

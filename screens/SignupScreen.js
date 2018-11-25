@@ -40,7 +40,7 @@ export default class SignupScreen extends React.Component {
       Alert.alert('Error', result2.error);
       return;
     }
-
+    console.log(result2, result2.authorizationToken);
     setToken(result2.authorizationToken);
     this.props.navigation.navigate('Main');
 
