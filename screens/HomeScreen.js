@@ -153,7 +153,7 @@ export default class HomeScreen extends React.Component {
             <MapView.Marker
               key={i}
               coordinate={marker.latlng}
-              onPress={() => this.selectParking(marker)}
+              onSelect={() => this.selectParking(marker)}
               onDeselect={() => this.setState({ selectedParking: null })}
               stopPropagation
               // title={marker.title}
