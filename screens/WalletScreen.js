@@ -24,7 +24,7 @@ export default class WalletScreen extends React.Component {
         ...deposits.map(item => ({ ...item, type: 'DEPOSIT' })),
         ...payments.map(item => ({ ...item, type: 'PAYMENT' })),
       ],
-      ['createdAt'],
+      'createdAt',
     ).reverse();
     console.log(mergedList);
     this.setState({ list: mergedList });
