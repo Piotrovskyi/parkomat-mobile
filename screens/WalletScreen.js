@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, Button, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Button, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 // import { ExpoConfigView } from '@expo/samples';
 import { me, depositsList, paymentsList } from '../api';
 import { sortBy } from 'lodash';
-import { subscribe, setState } from '../store';
+import { subscribe, setState, getState } from '../store';
 import moment from 'moment';
 
 export default class WalletScreen extends React.Component {
@@ -34,6 +34,7 @@ export default class WalletScreen extends React.Component {
     const user = await me();
     setState(user);
     await this.getList();
+    this.setState(getState());
   }
 
   componentDidMount() {
@@ -66,9 +67,15 @@ export default class WalletScreen extends React.Component {
           <Text style={styles.listHeadText}>Payments History</Text>
         </View>
         <ScrollView>
-          {this.state.list.map((item, i) => {
-            return <ListItem key={i} data={item} />;
-          })}
+          {this.state.list.length ? (
+            this.state.list.map((item, i) => {
+              return <ListItem key={i} data={item} />;
+            })
+          ) : (
+            <View style={{ height: 200, justifyContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator />
+            </View>
+          )}
         </ScrollView>
       </View>
     );

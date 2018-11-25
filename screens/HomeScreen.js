@@ -52,13 +52,17 @@ export default class HomeScreen extends React.Component {
 
   _handleNotification = notification => {
     if (!notification.data) return;
+    console.log('notification', notification.data);
     switch (notification.data.type) {
       case 'add-deposit': {
         setState({ balance: notification.data.amount });
         return;
       }
+      case 'park-end': {
+        setState({ balance: notification.data.newBalance });
+        return;
+      }
     }
-    // this.setState({ notification: notification });
   };
 
   async componentWillMount() {

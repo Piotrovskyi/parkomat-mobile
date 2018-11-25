@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, Button, Alert, AsyncStorage, SectionList, StyleSheet } from 'react-native';
 import { setToken } from '../api';
-// import { ExpoConfigView } from '@expo/samples';
 import { Constants } from 'expo';
+import { subscribe, getState } from '../store';
 
 export default class ProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -27,13 +27,28 @@ export default class ProfileScreen extends React.Component {
     ),
   });
 
+  state = {};
+
+  componentDidMount() {
+    subscribe(state => {
+      this.setState(state);
+    });
+    this.setState(getState());
+  }
+
   render() {
+    console.log('profile state', this.state);
+    const { login, cars = [], balance, authorizationToken, notificationsToken } = this.state;
     const { manifest } = Constants;
 
     const sections = [
-      { data: [{ value: 'login' }], title: 'Login' },
-      { data: [{ value: 'AF1212GB' }], title: 'Car number' },
+      { data: [{ value: login }], title: 'Login' },
+      { data: cars.map(car => ({ value: car.number })), title: 'Car number' },
+      { data: [{ value: balance + ' UAH' }], title: 'balance' },
+      { data: [], title: '' },
       { data: [{ value: manifest.version }], title: 'version' },
+      { data: [{ value: authorizationToken }], title: 'authorizationToken' },
+      { data: [{ value: notificationsToken }], title: 'notificationsToken' },
     ];
 
     return (
