@@ -20,7 +20,7 @@ import Balance from '../components/Balance';
 import { MonoText } from '../components/StyledText';
 // import FadeInView from '../components/AnimatedComponent';
 import { subscribe, setState } from '../store';
-
+// console.disableYellowBox = true;
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,

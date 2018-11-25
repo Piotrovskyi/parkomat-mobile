@@ -15,9 +15,7 @@ export default class WalletScreen extends React.Component {
     list: [],
   };
 
-  async componentWillMount() {
-    const user = await me();
-    setState(user);
+  async getList() {
     const deposits = await depositsList();
     const payments = await paymentsList();
     const mergedList = sortBy(
@@ -26,13 +24,21 @@ export default class WalletScreen extends React.Component {
         ...payments.map(item => ({ ...item, type: 'PAYMENT' })),
       ],
       ['createdAt'],
-    );
+    ).reverse();
+    console.log(mergedList);
     this.setState({ list: mergedList });
+  }
+
+  async componentWillMount() {
+    const user = await me();
+    setState(user);
+    await this.getList();
   }
 
   componentDidMount() {
     subscribe(({ balance }) => {
       this.setState({ balance });
+      this.getList();
     });
   }
 
@@ -82,7 +88,7 @@ class ListItem extends React.Component {
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               {/* <Text style={styles.number}># 5555555555</Text> */}
-              <Text style={styles.time}>14:21-16:24</Text>
+              {/* <Text style={styles.time}>14:21-16:24</Text> */}
             </View>
           </View>
         </View>
@@ -106,7 +112,7 @@ class ListItem extends React.Component {
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               {/* <Text style={styles.number}># 5555555555</Text> */}
-              <Text style={styles.time}>14:21-16:24</Text>
+              {/* <Text style={styles.time}>14:21-16:24</Text> */}
             </View>
           </View>
         </View>

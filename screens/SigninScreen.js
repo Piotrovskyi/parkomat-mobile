@@ -23,8 +23,8 @@ export default class SignInScreen extends React.Component {
     super(props);
 
     this.state = {
-      login: 'login',
-      password: 'password',
+      login: '',
+      password: '',
     };
   }
 

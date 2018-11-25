@@ -10,7 +10,7 @@ import {
   Text,
   AsyncStorage,
 } from 'react-native';
-
+import CustomButton from '../components/CustomButton';
 import { signup, login as apiLogin, setToken } from '../api';
 export default class SignupScreen extends React.Component {
   static navigationOptions = {
@@ -21,9 +21,9 @@ export default class SignupScreen extends React.Component {
     super(props);
 
     this.state = {
-      login: 'login1',
-      password: 'password',
-      carNumber: 'АР2121НА',
+      login: '',
+      password: '',
+      carNumber: '',
     };
   }
 
@@ -76,7 +76,7 @@ export default class SignupScreen extends React.Component {
         />
 
         <View style={styles.loginButtonWrapper}>
-          <Button title={'Sign up'} onPress={this.onSignup.bind(this)} />
+          <CustomButton onPress={this.onSignup.bind(this)}>Sign up</CustomButton>
         </View>
 
         <Text>Already have an account?</Text>
@@ -104,14 +104,5 @@ const styles = StyleSheet.create({
   loginButtonWrapper: {
     marginBottom: 80,
     marginTop: 30,
-    borderWidth: 1,
-    borderColor: '#3a51c0',
-    paddingVertical: 5,
-    paddingHorizontal: 40,
-    // width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 60,
-    borderRadius: 20,
   },
 });
