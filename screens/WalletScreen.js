@@ -4,6 +4,7 @@ import { View, Text, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { me, depositsList, paymentsList } from '../api';
 import { sortBy } from 'lodash';
 import { subscribe, setState } from '../store';
+import moment from 'moment';
 
 export default class WalletScreen extends React.Component {
   static navigationOptions = {
@@ -36,19 +37,25 @@ export default class WalletScreen extends React.Component {
   }
 
   componentDidMount() {
-    subscribe(({ balance }) => {
-      this.setState({ balance });
+    subscribe(user => {
+      this.setState(user);
       this.getList();
     });
   }
 
   render() {
+    const { lastDeposit } = this.state;
     return (
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         <View style={styles.header}>
           <Text style={[styles.textColor, styles.headerText]}>Your balance:</Text>
           <Text style={[styles.textColor, styles.amountText]}>{this.state.balance} UAH</Text>
-          <Text style={[styles.textColor, styles.infoText]}>Last refilling: 09 Avg at 10:46</Text>
+          {lastDeposit && (
+            <Text style={[styles.textColor, styles.infoText]}>
+              Last refilling: {moment.unix(lastDeposit.createdAt).format('DD MMM')} at{' '}
+              {moment.unix(lastDeposit.createdAt).format('HH:MM')}
+            </Text>
+          )}
           <View style={styles.addButtonWrapper}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Payment')}>
               <Text style={styles.addButtonText}>Add money</Text>
@@ -75,8 +82,8 @@ class ListItem extends React.Component {
       return (
         <View style={styles.listItemContainer}>
           <View>
-            <Text style={styles.day}>17</Text>
-            <Text style={styles.month}>jun</Text>
+            <Text style={styles.day}>{moment.unix(createdAt).format('DD')}</Text>
+            <Text style={styles.month}>{moment.unix(createdAt).format('MMM')}</Text>
           </View>
           <View style={{ paddingHorizontal: 27 }}>
             <View style={{ borderColor: '#808996', borderLeftWidth: 1, flex: 1 }} />
@@ -87,7 +94,10 @@ class ListItem extends React.Component {
               <Text style={[styles.amount, { color: 'red' }]}>-{amount} UAH</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              {/* <Text style={styles.number}># 5555555555</Text> */}
+              <Text style={styles.number}>
+                {moment.unix(createdAt).format('DD MMM')} at{' '}
+                {moment.unix(createdAt).format('HH:MM')}
+              </Text>
               {/* <Text style={styles.time}>14:21-16:24</Text> */}
             </View>
           </View>
@@ -99,8 +109,8 @@ class ListItem extends React.Component {
       return (
         <View style={styles.listItemContainer}>
           <View>
-            <Text style={styles.day}>17</Text>
-            <Text style={styles.month}>jun</Text>
+            <Text style={styles.day}>{moment.unix(createdAt).format('DD')}</Text>
+            <Text style={styles.month}>{moment.unix(createdAt).format('MMM')}</Text>
           </View>
           <View style={{ paddingHorizontal: 27 }}>
             <View style={{ borderColor: '#808996', borderLeftWidth: 1, flex: 1 }} />
@@ -111,7 +121,10 @@ class ListItem extends React.Component {
               <Text style={styles.amount}>+{amount} UAH</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              {/* <Text style={styles.number}># 5555555555</Text> */}
+              <Text style={styles.number}>
+                {moment.unix(createdAt).format('DD MMM')} at{' '}
+                {moment.unix(createdAt).format('HH:MM')}
+              </Text>
               {/* <Text style={styles.time}>14:21-16:24</Text> */}
             </View>
           </View>

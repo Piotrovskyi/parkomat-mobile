@@ -4,10 +4,12 @@ import { Text, View, StyleSheet, Platform, Button, Image, TouchableOpacity } fro
 export default class ParkingInfo extends React.Component {
   render() {
     const { selectedParking, makeRoute } = this.props;
+    console.log(selectedParking);
     return (
       <View style={styles.tabBarInfoContainer}>
-        <View style={styles.header}>
+        <View style={[styles.header, { flexDirection: 'row', justifyContent: 'space-between' }]}>
           <Text style={styles.headerText}>{selectedParking.title}</Text>
+          <Text style={styles.headerText}>{selectedParking.price} UAH/hour</Text>
         </View>
         <View
           style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15 }}>
@@ -20,8 +22,10 @@ export default class ParkingInfo extends React.Component {
               </View>
               <View>
                 <Text style={styles.detailsText}>
-                  <Text style={styles.freeSpots}>20</Text>
-                  /100
+                  <Text style={styles.freeSpots}>
+                    {selectedParking.places - selectedParking.actualCars.length}
+                  </Text>
+                  /{selectedParking.places}
                 </Text>
                 <Text style={styles.detailsText}>06:00-00:00</Text>
               </View>
