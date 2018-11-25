@@ -14,7 +14,9 @@ export default class Balance extends React.Component {
   render() {
     return (
       <View style={styles.tabBarInfoContainer}>
-        <Text>Your balance: {this.props.amount} UAH</Text>
+        <Text style={{ color: '#808996', fontSize: 18 }}>
+          Your balance: {this.props.amount} UAH
+        </Text>
       </View>
     );
   }

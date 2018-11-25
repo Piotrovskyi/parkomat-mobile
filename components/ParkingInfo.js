@@ -12,7 +12,7 @@ export default class ParkingInfo extends React.Component {
         <View
           style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15 }}>
           <View style={[styles.center, { flex: 1 }]}>
-            <Text style={styles.tabBarInfoText}>Astronomicheskaya 22, Kharkov, 12345</Text>
+            <Text style={styles.tabBarInfoText}>{selectedParking.description}</Text>
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <View style={{ marginRight: 15, justifyContent: 'flex-end' }}>
                 <Text style={styles.detailsText}>Free parking places</Text>

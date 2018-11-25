@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 
 import { login, setToken } from '../api';
+import CustomButton from '../components/CustomButton';
+
 export default class SignInScreen extends React.Component {
   static navigationOptions = {
     title: 'Please sign in',
@@ -59,7 +61,7 @@ export default class SignInScreen extends React.Component {
         />
 
         <View style={styles.loginButtonWrapper}>
-          <Button title={'Sign in'} onPress={this.onLogin.bind(this)} />
+          <CustomButton onPress={this.onLogin.bind(this)}>Sign in</CustomButton>
         </View>
 
         <Text>Don’t have an account?</Text>
@@ -87,14 +89,14 @@ const styles = StyleSheet.create({
   loginButtonWrapper: {
     marginBottom: 80,
     marginTop: 30,
-    borderWidth: 1,
-    borderColor: '#3a51c0',
-    paddingVertical: 5,
-    paddingHorizontal: 40,
-    // width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 60,
-    borderRadius: 20,
+    // borderWidth: 1,
+    // borderColor: '#3a51c0',
+    // paddingVertical: 5,
+    // paddingHorizontal: 40,
+    // // width: '100%',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // height: 60,
+    // borderRadius: 20,
   },
 });
