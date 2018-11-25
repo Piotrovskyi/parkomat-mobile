@@ -36,8 +36,8 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
-    subscribe(({ balance }) => {
-      this.setState({ balance });
+    subscribe(({ balance, currentlyOnParking }) => {
+      this.setState({ balance, currentlyOnParking });
     });
 
     registerForPushNotificationsAsync();
@@ -59,7 +59,11 @@ export default class HomeScreen extends React.Component {
         return;
       }
       case 'park-end': {
-        setState({ balance: notification.data.newBalance });
+        setState({ balance: notification.data.newBalance, currentlyOnParking: false });
+        return;
+      }
+      case 'park-start': {
+        setState({ currentlyOnParking: true });
         return;
       }
     }
@@ -129,7 +133,7 @@ export default class HomeScreen extends React.Component {
       );
     }
 
-    const { selectedParking } = this.state;
+    const { selectedParking, currentlyOnParking } = this.state;
 
     return (
       <View style={styles.container}>
@@ -168,13 +172,12 @@ export default class HomeScreen extends React.Component {
           ))}
         </MapView>
 
-        {selectedParking && (
-          <ParkingInfo
-            selectedParking={selectedParking}
-            makeRoute={this.makeRoute}
-            myLocation={this.state.location.coords}
-          />
-        )}
+        <ParkingInfo
+          currentlyOnParking={currentlyOnParking}
+          selectedParking={selectedParking}
+          makeRoute={this.makeRoute}
+          myLocation={this.state.location.coords}
+        />
 
         <Balance amount={this.state.balance} />
       </View>
