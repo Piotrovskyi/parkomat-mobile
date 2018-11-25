@@ -1,9 +1,28 @@
 import React from 'react';
 import { Text, View, StyleSheet, Platform, Button, Image, TouchableOpacity } from 'react-native';
 
+const getDistance = (from, to) => {
+  const R = 6378137;
+  const dLat = rad(to.latitude - from.latitude);
+  const dLong = rad(to.longitude - from.longitude);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(from.latitude)) *
+      Math.cos(rad(to.latitude)) *
+      Math.sin(dLong / 2) *
+      Math.sin(dLong / 2);
+  console.log('===>', a);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return (R * c) / 1000;
+};
+
+const rad = x => {
+  return (x * Math.PI) / 180;
+};
+
 export default class ParkingInfo extends React.Component {
   render() {
-    const { selectedParking, makeRoute } = this.props;
+    const { selectedParking, makeRoute, myLocation } = this.props;
     console.log(selectedParking);
     return (
       <View style={styles.tabBarInfoContainer}>
@@ -44,7 +63,9 @@ export default class ParkingInfo extends React.Component {
               />
             </TouchableOpacity>
             <Text style={{ textAlign: 'center' }}>Distance:</Text>
-            <Text style={[styles.detailsText, { textAlign: 'center' }]}> 5.3km</Text>
+            <Text style={[styles.detailsText, { textAlign: 'center' }]}>
+              {getDistance(myLocation, selectedParking.latlng).toFixed(1)}km
+            </Text>
           </View>
         </View>
       </View>

@@ -159,7 +159,11 @@ export default class HomeScreen extends React.Component {
         </MapView>
 
         {selectedParking && (
-          <ParkingInfo selectedParking={selectedParking} makeRoute={this.makeRoute} />
+          <ParkingInfo
+            selectedParking={selectedParking}
+            makeRoute={this.makeRoute}
+            myLocation={this.state.location.coords}
+          />
         )}
 
         <Balance amount={this.state.balance} />
