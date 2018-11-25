@@ -122,6 +122,7 @@ export const deposit = payload => {
 };
 
 export const me = () => {
+  console.log(me, headers());
   return fetch(apiHost + '/api/user', {
     method: 'GET',
     headers: {
