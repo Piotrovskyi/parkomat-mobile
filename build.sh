@@ -1,3 +1,7 @@
+
+EXPO_USERNAME=$1
+EXPO_PASSWORD=$2
+
 expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
 
 docker run -i --rm \
