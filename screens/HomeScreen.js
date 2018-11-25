@@ -36,6 +36,12 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
+    this._subscription = this.props.navigation.addListener('willFocus', async () => {
+      const user = await me();
+      setState(user);
+      this._getParkingsAsync();
+    });
+
     subscribe(({ balance, currentlyOnParking }) => {
       this.setState({ balance, currentlyOnParking });
     });

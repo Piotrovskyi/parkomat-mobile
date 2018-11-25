@@ -38,6 +38,13 @@ export default class WalletScreen extends React.Component {
   }
 
   componentDidMount() {
+    this._subscription = this.props.navigation.addListener('willFocus', async () => {
+      const user = await me();
+      setState(user);
+      await this.getList();
+      this.setState(getState());
+    });
+
     subscribe(user => {
       this.setState(user);
       this.getList();
