@@ -135,6 +135,7 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <MapView
           // provider={MapView.PROVIDER_GOOGLE}
+          onPress={() => this.setState({ selectedParking: null })}
           style={{ flex: 1 }}
           initialRegion={{
             latitude: get(this, 'state.location.coords.latitude'),
@@ -154,7 +155,7 @@ export default class HomeScreen extends React.Component {
               key={i}
               coordinate={marker.latlng}
               onSelect={() => this.selectParking(marker)}
-              onDeselect={() => this.setState({ selectedParking: null })}
+              // onDeselect={() => this.setState({ selectedParking: null })}
               stopPropagation
               // title={marker.title}
               // description={marker.description}
