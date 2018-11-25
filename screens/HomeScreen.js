@@ -155,6 +155,7 @@ export default class HomeScreen extends React.Component {
               coordinate={marker.latlng}
               onPress={() => this.selectParking(marker)}
               onDeselect={() => this.setState({ selectedParking: null })}
+              stopPropagation
               // title={marker.title}
               // description={marker.description}
               image={
