@@ -3,8 +3,8 @@ const apiHost = 'http://185.12.178.11:3000';
 let token = null;
 
 export const setToken = newToken => {
+  console.log('setToken', token);
   token = newToken;
-  console.log(token);
 };
 
 const headers = () => ({
@@ -58,6 +58,7 @@ export const registerForPushNotificationsAsync = async () => {
   // Get the token that uniquely identifies this device
   let token = await Notifications.getExpoPushTokenAsync();
   // POST the token to your backend server from where you can retrieve it to send push notifications.
+  console.log('register notifications', headers());
   return fetch(PUSH_ENDPOINT, {
     method: 'POST',
     headers: {

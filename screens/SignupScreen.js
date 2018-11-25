@@ -41,8 +41,7 @@ export default class SignupScreen extends React.Component {
       return;
     }
 
-    await AsyncStorage.setItem('userToken', result2.authorizationToken);
-    setToken(result.authorizationToken);
+    setToken(result2.authorizationToken);
     this.props.navigation.navigate('Main');
 
     // await AsyncStorage.setItem('userToken', result.authorizationToken);
